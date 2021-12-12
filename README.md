@@ -24,8 +24,16 @@ fn main() {
 }
 ```
 
-
 ## Good instructions for good usage
+- ### What's my display's i2c address ?
+    To find your display's i2c address, simply check on your screen an
+    inscription "0x...". Considering being on a 7 bits base, perform this
+    calculation: (example with 0x78 found on your screen, but written as 8 bits
+    hexadecimal number)
+    > 0x78 = 01111000 (as 8 bits in binary) \
+    > = 0111100 (as 7 bits in binary) = 0x3c (as hexadecimal)
+
+    (from [https://passionelectronique.fr](https://passionelectronique.fr/ecran-oled-i2c-arduino/) in French)
 
 - ### How to connect my screen ?
     These are the two most important GPIO ports that we will use.
