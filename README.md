@@ -15,9 +15,9 @@ Edit "Cargo.toml" file and add the following part:
 i2clib = { git = "https://github.com/antoninhrlt/i2clib" }
 ```
 
-Now edit your main file: "src/main.rs", it should look like this:
+Now edit your main file: "src/main.rs", it should look like this after:
 ```rust
-use i2clib;
+use i2clib::*;
 
 fn main() {
     // nothing to show for the moment
@@ -25,8 +25,8 @@ fn main() {
 ```
 
 ## Good instructions for good usage
-- ### What's my display's i2c address ?
-    To find your display's i2c address, simply check on your screen an
+- ### What's my screen's i2c address ?
+    To find your screen's i2c address, simply check on your screen an
     inscription "0x...". Considering being on a 7 bits base, perform this
     calculation: (example with 0x78 found on your screen, but written as 8 bits
     hexadecimal number)
@@ -34,6 +34,11 @@ fn main() {
     > = 0111100 (as 7 bits in binary) = 0x3c (as hexadecimal)
 
     (from [https://passionelectronique.fr](https://passionelectronique.fr/ecran-oled-i2c-arduino/) in French)
+
+- ### What is my screen's port ?
+  Open a terminal on your Raspberry PI and type: 
+  `ls /dev/ | grep "i2c-"` and you get for example: `i2c-1`, so "1" is your 
+  port ! 
 
 - ### How to connect my screen ?
     These are the two most important GPIO ports that we will use.
@@ -63,7 +68,7 @@ fn main() {
     tutorial I will considering you don't have any monitor connected and all can 
     be done with the simple shell.
     - Turn on your Raspberry PI
-    - In your shell: `$ sudo raspi-config`, go to "3 Interface Options" and then
+    - Type this in your terminal: `$ sudo raspi-config`, go to "3 Interface Options" and then
     "P5  I2C", enable it by press enter two times. [Screenshots here](share/)
 
     - Exit the Raspberry's config menu by press "echap".
