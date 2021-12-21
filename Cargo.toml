@@ -5,3 +5,4 @@ edition = "2018"
 
 [dependencies]
 libc = "0.2.102"
+nix = "0.23.0"
