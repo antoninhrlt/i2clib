@@ -9,3 +9,4 @@ pub const OLED_OTHER_ADDRESS: i32 = 0x3D;   // = 0x71 on a 8 bits base
 pub const I2C_SLAVE: i32 = 0x0703;
 pub const I2C_RDWR : i32 = 0x0707;
 pub const I2C_SMBUS: i32 = 0x0720;
+pub const I2C_ADDR : i32 = 0x20;
