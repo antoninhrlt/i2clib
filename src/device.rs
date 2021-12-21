@@ -2,7 +2,15 @@
 // Copyright (c) 2021 Antonin Hérault
 // Under the MIT License
 
-use std::io;
+use std::{
+    io, io::Write,
+    convert::TryInto,
+    os::unix::io::{
+        RawFd,
+        FromRawFd
+    },
+    fs::File,
+};
 
 use crate::{
     addr,
@@ -25,20 +33,20 @@ impl Device {
         }
     }
 
-    pub unsafe fn write(&mut self, data: i32) -> Result<i32, io::Error> {
-        let fd: i32 = self.driver.get_c_file_descriptor().unwrap();
-
+    pub unsafe fn write(&mut self, data: i32) -> Result<usize, io::Error> {
+        let fd: RawFd = self.driver.as_fd()?;
         let ioctl_result = libc::ioctl(
             fd,
-            addr::I2C_SLAVE as u32, 
+            addr::I2C_SLAVE.try_into().unwrap(), 
             addr::I2C_ADDR
         );
 
         if ioctl_result < 0 {
-            Err(io::Error::new(io::ErrorKind::Other, "ioctl error"))
-        } else {
-            Ok(ioctl_result)
+            return Err(io::Error::new(io::ErrorKind::Other, "ioctl error"));
         }
+        
+        let mut file = File::from_raw_fd(fd);
+        file.write(&[255])
     }
 
     // pub fn read(&mut self, data: ?????) {

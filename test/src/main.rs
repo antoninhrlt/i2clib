@@ -3,7 +3,6 @@
 // Under the MIT License
 
 use i2clib::{
-    addr::OLED_ADDRESS,
     device::Device,
     driver::Driver,
     gpio::Gpio,
@@ -16,7 +15,8 @@ fn main() {
     let sda = Gpio::new(3);
     let sck = Gpio::new(5);
     
-    let driver = Driver::new(1, 0x3c, sda, sck);
+    let mut driver = Driver::new(1, 0x3c, sda, sck);
+    driver.start();
     
     let mut device = Device::new(driver, 128, 64);
     unsafe {

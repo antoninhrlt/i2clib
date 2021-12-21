@@ -6,6 +6,11 @@ use std::{
     thread, 
     time::Duration,
     io,
+    fs::File,
+    os::unix::io::{
+        RawFd,
+        IntoRawFd,
+    }
 };
 
 use crate::{
@@ -64,20 +69,13 @@ impl Driver {
         self.sda.high().apply();
     }
 
-    pub unsafe fn get_c_file_descriptor(&mut self) -> Result<i32, io::Error> {
-        let file_name = String::from("/dev/i2c-") + &self.port.to_string();
+    pub fn as_fd(&mut self) -> Result<RawFd, io::Error> {
+        let filename = format!("/dev/i2c-{}", &self.port);
+        let file = File::create(filename); // read-write mode
         
-        let result: i32 = libc::open(
-            file_name.as_ptr() as *const u8,
-            libc::O_RDWR
-        );
-        
-        if result < 0 {
-            Err(io::Error::new(io::ErrorKind::Other, 
-                format!("Error opening file {}", file_name)
-            ))
-        } else {
-            Ok(result)
+        match file {
+            Ok(file) => Ok(file.into_raw_fd().clone()),
+            Err(e) => Err(e),
         }
     }
 }
