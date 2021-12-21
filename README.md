@@ -3,11 +3,11 @@ Rust i2c manipulation library designed for Raspberry PI devices. Initial
 creation made for AZDelivery OLED i2c displays
 
 ## Simple Example
-The library is programmed in Rust, so in this example we will use Rust and Cargo
-tool. Another language ? Without Cargo ? Let's see 
+This library is written in Rust, so in this example we will use the Rust 
+language and the Cargo tool. Another language ? Without Cargo ? Let's see the 
 [other examples](#other-examples)
 
-Generate your project with Cargo by running `$ cargo init` in your shell at the
+Generate a project with Cargo by running `$ cargo init` in your shell at the
 directory you chosen earlier.
 Edit "Cargo.toml" file and add the following part:
 ```toml
@@ -67,11 +67,12 @@ fn main() {
     to your Raspberry PI (only with a Linux system like Raspbian). During this
     tutorial I will considering you don't have any monitor connected and all can 
     be done with the simple shell.
-    - Turn on your Raspberry PI
-    - Type this in your terminal: `$ sudo raspi-config`, go to "3 Interface Options" and then
-    "P5  I2C", enable it by press enter two times. [Screenshots here](share/)
-
+    - Turn on your Raspberry PI.
+    - Type this in the terminal: `$ sudo raspi-config`, go to "3 Interface 
+    Options" and then "P5  I2C", enable it by press enter two times.
+    [Screenshots here](share/)
     - Exit the Raspberry's config menu by press "echap".
+    - Restart your Raspberry PI.
     - All done !
 
 # 
