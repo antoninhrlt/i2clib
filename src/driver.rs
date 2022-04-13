@@ -26,8 +26,8 @@ pub struct Driver {
     pub port: i32,
     pub address: i32,
     pub speed: f64,
-    sda: Gpio,
-    sck: Gpio,
+    sda: Gpio, // serial data line
+    sck: Gpio, // serial clock (lines), or named "scl"
 }
 
 impl Driver {
