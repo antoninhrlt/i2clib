@@ -1,8 +1,2 @@
-bin/
-target/
-
-test/target/
-test/bin/
-test/Cargo.lock
-
 update.sh
+build/

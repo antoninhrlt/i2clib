@@ -2,15 +2,10 @@
 // Copyright (c) 2021 Antonin Hérault
 // Under the MIT License
 
-use std::{
-    io, io::Write,
-    convert::TryInto,
-    os::unix::io::{
-        RawFd,
-        FromRawFd
-    },
-    fs::File,
-};
+use std::convert::TryInto;
+use std::io;
+use std::io::Write;
+use std::os::unix::io::{RawFd, IntoRawFd};
 
 use crate::{
     addr,
@@ -18,40 +13,29 @@ use crate::{
     shape::Shape,
 };
 
+/// Manage a screen from its adapted driver
 pub struct Device {
     driver: Driver,
-    width: i32,
-    height: i32
+    width: u32,
+    height: u32,
 }
 
 impl Device {
-    pub fn new(driver: Driver, width: i32, height: i32) -> Device {
+    pub fn new(driver: Driver, width: u32, height: u32) -> Device {
         Device {
             driver,
             width,
-            height
+            height,
         }
     }
 
-    pub unsafe fn write(&mut self, data: i32) -> Result<usize, io::Error> {
-        let fd: RawFd = self.driver.as_fd()?;
-        let ioctl_result = libc::ioctl(
-            fd,
-            addr::I2C_SLAVE.try_into().unwrap(), 
-            addr::I2C_ADDR
-        );
-
-        if ioctl_result < 0 {
-            return Err(io::Error::new(io::ErrorKind::Other, "ioctl error"));
-        }
-        
-        let mut file = File::from_raw_fd(fd);
-        file.write(&[255])
+    pub fn write(&mut self, data: u32) {
+        todo!()
     }
 
-    // pub fn read(&mut self, data: ?????) {
-
-    // }
+    pub fn read(&mut self) -> u32 {
+        todo!()
+    }
 
     pub fn draw(&mut self, shape: Shape, fill: bool) {
         todo!()

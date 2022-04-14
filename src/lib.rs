@@ -7,3 +7,4 @@ pub mod device;
 pub mod driver;
 pub mod gpio;
 pub mod shape;
+pub mod speed;

@@ -2,80 +2,82 @@
 // Copyright (c) 2021 Antonin Hérault
 // Under the MIT License
 
-use std::{
-    thread, 
-    time::Duration,
-    io,
-    fs::File,
-    os::unix::io::{
-        RawFd,
-        IntoRawFd,
-    }
-};
+use std::fs::File;
+use std::io;
+use std::os::unix::io::{RawFd, IntoRawFd};
+use std::thread;
+use std::time::Duration;
 
 use crate::{
+    addr::Addr,
     gpio::Gpio,
+    speed::Speed,
 };
 
+/// And how much max_of_masters ? It's unlimited.
+pub const MAX_OF_SLAVES: u64 = 1008;
 
-pub const STANDARD_SPEED: f64   = 0.000000047;
-pub const FAST_SPEED: f64       = 0.000000013;
-pub const FAST_PLUS_SPEED: f64  = 0.000000005;
-
+/// Way to manage the screen device from GPIOs `sda` and `sck` \ 
 pub struct Driver {
-    pub port: i32,
-    pub address: i32,
-    pub speed: f64,
-    sda: Gpio, // serial data line
-    sck: Gpio, // serial clock (lines), or named "scl"
+    port: i32,
+    address: Addr,
+    speed: Speed,
+
+    /// Serial data line
+    sda: Gpio,
+    /// Serial clock (lines), also known as `scl`
+    sck: Gpio,
 }
 
 impl Driver {
-    pub fn new(port: i32, address: i32, sda: Gpio, sck: Gpio) -> Driver {
+    pub fn new(port: i32, address: Addr, speed: Speed, sda: Gpio, sck: Gpio) -> Driver {
         Driver {
             port,
             address,
-            speed: STANDARD_SPEED,
+            speed,
             sda,
             sck,
         }
     }
 
-    pub fn wait(&self) {
-        thread::sleep(Duration::new(self.speed as u64, 0))
-    }
-
-    pub fn change_speed(&mut self, speed: f64) {
-        self.speed = speed;
-    }
-
     pub fn start(&mut self) {
-        self.sda.high().apply();
-        self.wait();
-        self.sda.low().apply();
-
-        self.sck.high().apply();
+        todo!()
     }
 
     pub fn restart(&mut self) {
-        self.sck.low().apply();
-        self.wait();
-        self.sck.high().apply();
+        todo!()
     }
 
     pub fn stop(&mut self) {
-        self.sda.low().apply();
-        self.wait();
-        self.sda.high().apply();
+        todo!()
     }
 
+    /// Time needed between to operations
+    pub fn wait(&self) {
+        thread::sleep(Duration::new(self.speed, 0))
+    }
+
+    pub fn change_speed(&mut self, speed: Speed) {
+        self.speed = speed;
+    }
+
+    /// Get the driver as Unix file descriptor
     pub fn as_fd(&mut self) -> Result<RawFd, io::Error> {
-        let filename = format!("/dev/i2c-{}", &self.port);
-        let file = File::create(filename); // read-write mode
-        
-        match file {
-            Ok(file) => Ok(file.into_raw_fd().clone()),
-            Err(e) => Err(e),
-        }
+        let file = File::create(format!("/dev/i2c-{}", &self.port))?;
+        Ok(file.into_raw_fd().clone())
+    }
+
+    // Getters
+
+    pub fn port(&self) -> &i32 {
+        &self.port
+    }
+
+    pub fn address(&self) -> &Addr {
+        &self.address
+    }
+
+    pub fn speed(&self) -> &Speed {
+        &self.speed
     }
 }
